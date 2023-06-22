@@ -24,11 +24,11 @@ def message(msg, delay = 0):
 
 def main_menu():
     print(_("""Welcome to Adastral. Enter a number to continue.\n
-        1 - Install or reinstall the game
+        1 - Install or reinstall a game
         2 - Check for and apply any available updates
         3 - Verify and repair game files"""))
     user_choice = int(input())
-    if user_choice == 1:
+    if user_choice == 1: ## choose game!
         message(_("Starting the download for the game... You may see some errors that are safe to ignore."), 3)
         downloads.install()
         troubleshoot.apply_blacklist()

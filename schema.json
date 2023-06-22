@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://adastral.net/southbank/southbank.schema.json",
+  "title": "southbank",
+  "description": "Adastral's meta config file",
+  "type": "object",
+  "properties": {
+	  "ver": {},
+	  "authority_url": {},
+	  "authority_pub_key": {},
+	  "games": {
+		  "type": "array",
+		  "items": {
+			  "type": "object",
+			  "properties":{
+				  "name":{"type":"string"},
+				  "data_dir":{"type":"string"},
+				  "source":{"type":"string"},
+				  "versioning":{"type":"number"},
+				  "versioning_opts":{"type":"object"},
+				  "a_gui":{
+					  "type":"object",
+					  "properties": {
+						  "icon":{"type":"string"},
+						  "logo":{"type":"string"},
+						  "bg":{"type":"string"},
+						  "theme":{"type":"string"}
+						  },
+					  "required": ["icon","logo","bg","theme"]
+				   },
+				  "steam_art":{
+					  "type":"object",
+					  "properties": {
+						  "icon":{"type":"string"},
+						  "logo":{"type":"string"},
+						  "hero":{"type":"string"},
+						  "grid":{"type":"string"}
+					   },
+					   "required": ["icon","logo","hero","grid"]
+				   }					
+						  
+				  
+			  },
+			  "required": ["name","data_dir","source","versioning"]
+		  },
+		  "minItems": 1,
+		  "uniqueItems": true
+	  }
+	}
+}
+
