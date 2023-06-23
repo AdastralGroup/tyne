@@ -20,7 +20,7 @@ def get_version_list():
             gui.message_end(_("Could not get version list. If your internet connection is fine, the servers could be having technical issues."), 1)
     return VERSION_LIST
 
-def update_version_file():
+def update_version_file(): # this needs to be updated to cover all games....
     """
     The previous launcher/updater leaves behind a rev.txt file with the old internal revision number.
     To avoid file bloat, we reuse this, but replace it with the game's semantic version number.
@@ -49,7 +49,7 @@ def update_version_file():
 
 def get_installed_version():
     update_version_file()
-    local_version_file = open(vars.INSTALL_PATH + vars.DATA_DIR + 'rev.txt', 'r')
+    local_version_file = open(vars.INSTALL_PATH + vars.DATA_DIR + '.adastral_ver', 'r')
     local_version = local_version_file.read().rstrip('\n')
     return local_version
 
@@ -75,7 +75,6 @@ def check_for_updates():
             gui.message_end(_("We have nothing to do. Goodbye!"), 0)
     # End of checking, we definitely have a valid installation at this point
     # Now we have to see if there's a remote patch matching our local version
-
 
     # First, as a basic sanity check, do we know about this version at all?
     # We don't want to try to patch from 746 or some other nonexistent version.
