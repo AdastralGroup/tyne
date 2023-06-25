@@ -15,8 +15,10 @@ else:
 # For determining whether we're installing or updating/repairing the game
 
 
+SOUTHBANK = ""
+INSTALL_PATH = ""
 SCRIPT_MODE = len(sys.argv) > 1
-LAUNCHER_SOURCE_URL = 'https://wiki.tf2classic.com/kachemak/'
+LAUNCHER_SOURCE_URL = 'https://adastral.net/southbank/'
 
 BLACKLIST_URL = 'https://tf2classic.org/serverlist/blacklist.php'
 BLACKLIST_PATH = '/tf2classic/cfg/server_blacklist.txt'

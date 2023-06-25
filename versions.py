@@ -1,11 +1,12 @@
 from os import path
 from gettext import gettext as _
 import gui
-from southbank import Game
+from downloads import Kachemak
 
 VERSION_LIST = None
 
-def check_for_updates(game: Game):
+
+def check_for_updates(game: Kachemak):
     """
     This function checks the local version against the list of remote versions and deems firstly, if an update is necessary, and secondarily, whether it's more efficient to update or reinstall.
     """
@@ -29,23 +30,22 @@ def check_for_updates(game: Game):
 
     # First, as a basic sanity check, do we know about this version at all?
     # We don't want to try to patch from 746 or some other nonexistent version.
-    found = game.local_version_check()
-    if not found:
+    if not game.local_version_check():
         if gui.message_yes_no(_("The version of your installation is unknown. It could be corrupted. Do you want to reinstall the game?"), False):
             return False
         else:
             gui.message_end(_("We have nothing to do. Goodbye!"), 0)
 
     # Now we're checking the latest version, to see if we're already up-to-date.
-    latest_version = game.downloads_data.get_latest_revision()
-    if game.get_installed_version()== latest_version:
+    latest_version = game.get_version_list()
+    if game.get_installed_version() == latest_version:
         if gui.message_yes_no(_("We think we've found an existing up-to-date installation of the game. Do you want to reinstall it?"), False):
             return False
         else:
             gui.message_end(_("We have nothing to do. Goodbye!"), 0)
 
     # Finally, we ensure our local version has a patch available before continuing.
-    patches = game.downloads_data.get_version_list()["patches"]
+    patches = game.get_version_list()["patches"]
     if game.get_installed_version() in patches:
         if gui.message_yes_no(_("An update is available for the game. Do you want to install it?"), None, True):
             if gui.message_yes_no(_("If running, please close your game client and/or game launcher. Confirm once they're closed."), None, True):

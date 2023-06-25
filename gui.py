@@ -12,6 +12,8 @@ import vars
 import downloads
 import versions
 import troubleshoot
+import prettytable
+import southbank
 
 def message(msg, delay = 0):
     """
@@ -22,33 +24,33 @@ def message(msg, delay = 0):
     if not vars.SCRIPT_MODE:
         sleep(delay)
 
-def main_menu():
-    print(_("""Welcome to Adastral. Enter a number to continue.\n
-        1 - Install or reinstall a game
+def main_menu(game: downloads.Kachemak):
+    print(_("""You've chosen {}. Please choose the following:\n
+        1 - Install or reinstall {}
         2 - Check for and apply any available updates
-        3 - Verify and repair game files"""))
+        3 - Verify and repair game files""".format(game.name,game.name)))
     user_choice = int(input())
     if user_choice == 1: ## choose game!
         message(_("Starting the download for the game... You may see some errors that are safe to ignore."), 3)
-        downloads.install()
+        game.install()
         troubleshoot.apply_blacklist()
         message_end(_("The installation has successfully completed. Remember to restart Steam!"), 0)
 
     elif user_choice == 2:
-        if versions.check_for_updates():
-            downloads.update()
+        if versions.check_for_updates(game):
+            game.update()
             message_end(_("The update has successfully completed."), 0)
         else:
             message(_("Starting the download for the game... You may see some errors that are safe to ignore."), 3)
-            downloads.install()
+            game.install()
             troubleshoot.apply_blacklist()
             message_end(_("The installation has successfully completed. Remember to restart Steam!"), 0)
 
     elif user_choice == 3:
-        version_json = versions.get_version_list()["versions"]
-        downloads.butler_verify(vars.SOURCE_URL + version_json[versions.get_installed_version()][
-            "signature"], vars.INSTALL_PATH + vars.DATA_DIR, vars.SOURCE_URL + version_json[
-            versions.get_installed_version()]["heal"])
+        version_json = game.get_version_list()["versions"]
+        game.butler_verify(game.source_url + version_json[game.get_installed_version()][
+            "signature"], game.install_path + game.data_dir, game.source_url + version_json[
+            game.get_installed_version()]["heal"])
         message_end(_("The verification process has completed, and any corruption has been repaired."), 0)
 
     else:
@@ -93,6 +95,24 @@ def message_yes_no(msg: str, default: bool = None, script_mode_default_override:
         if choice in valid:
             return valid[choice]
         print(_("[bold blue]Please respond with 'yes' or 'no' (or 'y' or 'n').[/bold blue]"))
+
+
+def game_chooser():
+    js = vars.SOUTHBANK
+    pparr = js.prettyprint()
+    tabl = prettytable.PrettyTable()
+    tabl.field_names = ["#","Name","Installed?","Local Version"]
+    tabl.add_rows(pparr)
+    st = tabl.get_string()
+    print(_(st))
+    user_choice = int(input())
+    if user_choice > len(js.games) or user_choice < 0:
+        message(_("Invalid choice. Please retry."))
+        game_chooser()
+    else:
+        return js.games[user_choice]
+
+
 
 
 def message_input(msg):

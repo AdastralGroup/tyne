@@ -10,6 +10,7 @@ import sys
 from os import environ, getcwd, path
 from platform import system
 from shutil import which
+import httpx
 from rich import print
 from gettext import gettext as _
 import gui

@@ -16,6 +16,7 @@ from rich import print
 import gui
 import downloads
 import setup
+import southbank
 import troubleshoot
 import vars
 import versions
@@ -68,17 +69,10 @@ def wizard():
         sanity_check()
         if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
             selfupdate.check_downloader_update()
-        setup.setup_binaries()
         setup.setup_path(False)
-        versions.get_version_list()
-
-        # Check if the game is already installed, for the purposes of running update_version_file() safely
-        if os.path.exists(vars.INSTALL_PATH + vars.DATA_DIR + 'gameinfo.txt'):
-            vars.INSTALLED = True
-            versions.update_version_file()
-
-        # All of the choice logic is handled in this function directly.
-        gui.main_menu()
+        vars.SOUTHBANK = southbank.RemoteJson()
+        # All the choice logic is handled in this function directly.
+        gui.main_menu(gui.game_chooser())
 
     except Exception as ex:
         if ex is not SystemExit:
@@ -122,7 +116,6 @@ path will be the current work directory.'''
             if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
                 selfupdate.check_downloader_update()
             setup.setup_path_script()
-            setup.setup_binaries()
 
             if os.path.exists(vars.INSTALL_PATH + vars.DATA_DIR + 'gameinfo.txt'):
                 vars.INSTALLED = True
