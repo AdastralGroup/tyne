@@ -95,26 +95,3 @@ def setup_path(manual_path):
             print(_("Reinitialising...\n"))
             setup_path(False)
 
-def setup_binaries():
-    """
-    Select paths for required binaries.
-    """
-    if system() == 'Windows':
-        # When we can detect that we're compiled using PyInstaller, we use their
-        # suggested method of determining the location of the temporary runtime folder
-        # to point to Aria2 and Butler.
-        if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-            vars.ARIA2C_BINARY = path.abspath(path.join(path.dirname(__file__), 'aria2c.exe'))
-            vars.BUTLER_BINARY = path.abspath(path.join(path.dirname(__file__), 'butler.exe'))
-        else:
-            # When running as a script, we just select the Binaries folder directly for Aria2 and Butler.
-            vars.ARIA2C_BINARY = 'Binaries/aria2c.exe'
-            vars.BUTLER_BINARY = 'Binaries/butler.exe'
-    else:
-        # If we're running on Linux...
-        if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-            vars.ARIA2C_BINARY = path.abspath(path.join(path.dirname(__file__), 'aria2c'))
-            vars.BUTLER_BINARY = path.abspath(path.join(path.dirname(__file__), 'butler'))
-        else:
-            vars.BUTLER_BINARY = 'Binaries/butler'
-            vars.ARIA2C_BINARY = 'Binaries/aria2c'
